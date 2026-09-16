@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import React from 'react'
 
+import { SectionTag } from '@/components/SectionTag'
+
 import type { NewsProps } from './types'
 
 const Corner: React.FC = () => (
@@ -22,7 +24,8 @@ const Corner: React.FC = () => (
   </svg>
 )
 
-/** Dark pill with a small square marker, used for the badge and each card's meta. */
+/** Dark pill with a small square marker, used for each card's meta line. The
+    section badge above uses the shared SectionTag instead. */
 const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/6 px-3 py-1.5 text-[12px] font-medium text-white/85 backdrop-blur-sm">
     <span aria-hidden="true" className="inline-block size-2.5 bg-white/80" />
@@ -46,7 +49,7 @@ export const News: React.FC<NewsProps> = ({ badge, headingLines, cta, items }) =
       <div className="relative">
         {badge && (
           <p className="mb-7">
-            <Pill>{badge}</Pill>
+            <SectionTag>{badge}</SectionTag>
           </p>
         )}
 

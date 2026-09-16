@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { SectionTag } from '@/components/SectionTag'
+
 import { Carousel } from './Carousel'
 import type { ProjectsProps } from './types'
 
@@ -13,9 +15,8 @@ export const Projects: React.FC<ProjectsProps> = ({ badge, headingLines, cta, it
   return (
     <section id="projets" className="bg-cream px-gutter py-[clamp(56px,7vw,96px)] text-ink">
       {badge && (
-        <p className="mb-7 inline-flex items-center gap-2 rounded-md border border-accent/30 px-3 py-2 text-[13px] font-medium text-accent">
-          <span aria-hidden="true" className="inline-block size-2.5 bg-accent" />
-          {badge}
+        <p className="mb-7">
+          <SectionTag tone="light">{badge}</SectionTag>
         </p>
       )}
 

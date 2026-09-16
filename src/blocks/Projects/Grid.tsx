@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { SectionTag } from '@/components/SectionTag'
+
 import { FilterableGrid } from './FilterableGrid'
 import type { ProjectCardData } from './types'
 
@@ -18,9 +20,8 @@ export const ProjectsGrid: React.FC<{ items: ProjectCardData[] }> = ({ items }) 
       {/* The hero already owns the h1, so the section title is an h2. Sized from
           the design frame — ~72px at 1440. */}
       <header className="mb-[clamp(32px,4vw,52px)]">
-        <p className="mb-7 inline-flex items-center gap-2 rounded-md border border-accent/30 px-3 py-2 text-[13px] font-medium text-accent">
-          <span aria-hidden="true" className="inline-block size-2.5 bg-accent" />
-          Nos réalisations
+        <p className="mb-7">
+          <SectionTag tone="light">Nos réalisations</SectionTag>
         </p>
         <h2 className="text-[clamp(2.4rem,5vw,4.5rem)] leading-[1.05] font-bold text-navy">
           Nos Projets

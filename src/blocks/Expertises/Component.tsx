@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 
+import { SectionTag } from '@/components/SectionTag'
+
 import type { ExpertisesProps } from './types'
 
 /*
@@ -59,14 +61,8 @@ export const Expertises: React.FC<ExpertisesProps> = ({ badge, headingLines, ite
   return (
     <section id="expertises" className="bg-cream px-gutter py-[clamp(56px,7vw,96px)] text-ink">
       {badge && (
-        <p className="mb-7 inline-flex items-center gap-2 text-[13px] font-medium text-accent">
-          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" className="flex-none">
-            <path
-              d="M6 0.5l1.2 3.3 3.3 1.2-3.3 1.2L6 9.5 4.8 6.2 1.5 5l3.3-1.2z"
-              fill="currentColor"
-            />
-          </svg>
-          {badge}
+        <p className="mb-7">
+          <SectionTag tone="light">{badge}</SectionTag>
         </p>
       )}
 

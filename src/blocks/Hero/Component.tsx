@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import React from 'react'
 
+import { SectionTag } from '@/components/SectionTag'
+
 import type { HeroProps } from './types'
 
 export const Hero: React.FC<HeroProps> = ({ badge, title, lede, cta, image }) => {
@@ -21,14 +23,8 @@ export const Hero: React.FC<HeroProps> = ({ badge, title, lede, cta, image }) =>
 
       <div className="w-full max-w-[940px]">
         {badge && (
-          <p className="mb-[30px] inline-flex items-center gap-[9px] rounded-full border border-white/20 bg-white/10 px-[18px] py-[9px] text-[13px] text-white/90 backdrop-blur-md backdrop-saturate-150">
-            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" className="flex-none">
-              <path
-                d="M6 0.5l1.2 3.3 3.3 1.2-3.3 1.2L6 9.5 4.8 6.2 1.5 5l3.3-1.2z"
-                fill="currentColor"
-              />
-            </svg>
-            {badge}
+          <p className="mb-[30px]">
+            <SectionTag>{badge}</SectionTag>
           </p>
         )}
 
