@@ -71,12 +71,25 @@ Ordering below is by risk, not by how interesting the work is.
       hero's layout depends on the headline breaking exactly where it does. Not worth the
       fields. Same for the `/projets` hero.
 
-- [ ] **8. Payload roles**
-      `admin` vs `editor`. Everything currently gates on "is anyone logged in", so any
-      account can edit users and settings. This is the piece that makes a handoff to a
-      non-technical client safe.
+- [ ] **8. Payload roles and per-section permissions** — planned, not built.
+      **Plan: [`docs/users-and-permissions.md`](users-and-permissions.md).**
+      Everything currently gates on "is anyone logged in", so any account can edit users
+      and settings. This is the piece that makes a handoff to a non-technical client safe.
 
-- [ ] **16. Audit trail — who published what**
+      Decided: Admin and Éditeur roles; an admin ticks, per editor, which sections they may
+      edit. Editors publish in their sections, deleting is admin-only, and replacing an
+      existing image is admin-only. Also in scope: names on users and turning document
+      locking back on.
+
+- [ ] **16. Audit trail — who published what** — planned, not built.
+      **Plan: [`docs/users-and-permissions.md`](users-and-permissions.md) §4.**
+
+      **Decided: the `audit-log` option below**, as a *Journal d'activité* collection readable
+      by admins only. It records created / published / unpublished / deleted, image uploads
+      and replacements, and user permission changes — **not** draft saves or autosaves. The
+      author-fields option is superseded: it loses the trail on delete, which is exactly the
+      case a log exists for.
+
       Verified against the schema: version tables (`_projects_v` and friends) store a full
       snapshot, `_status` and timestamps, but **no user column**. So there is complete
       history and no authorship — with two editors you cannot tell which of them published
