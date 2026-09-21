@@ -1,6 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
+import { adminOnly, loggedIn } from '@/access'
 import { GROUP } from '@/admin/i18n'
+import { logCollectionChange, logCollectionDelete } from '@/hooks/logActivity'
 import { revalidateHomeCollection } from '@/hooks/revalidateHome'
 
 export const Media: CollectionConfig = {
@@ -11,6 +13,12 @@ export const Media: CollectionConfig = {
   },
   access: {
     read: () => true,
+    // Any editor can add an image — they cannot illustrate their own section
+    // otherwise. Replacing or deleting one is admin-only: the same file is used
+    // by every page that references it, so a replacement changes all of them.
+    create: loggedIn,
+    update: adminOnly,
+    delete: adminOnly,
   },
   admin: {
     group: GROUP.files,
@@ -20,7 +28,8 @@ export const Media: CollectionConfig = {
     },
   },
   hooks: {
-    afterChange: [revalidateHomeCollection],
+    afterChange: [revalidateHomeCollection, logCollectionChange],
+    afterDelete: [logCollectionDelete],
   },
   fields: [
     {

@@ -1,6 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { canEdit, hideUnless } from '@/access'
 import { GROUP } from '@/admin/i18n'
+import { logGlobalChange } from '@/hooks/logActivity'
 import { revalidateHomeGlobal } from '@/hooks/revalidateHome'
 
 /**
@@ -18,9 +20,12 @@ export const FooterGlobal: GlobalConfig = {
   label: { fr: 'Pied de page', en: 'Footer' },
   access: {
     read: () => true,
+    update: canEdit('footer'),
+    readVersions: canEdit('footer'),
   },
   admin: {
     group: GROUP.site,
+    hidden: hideUnless('footer'),
     description: {
       fr: 'Visible sur : le pied de page de toutes les pages. Les liens « Nos métiers » se remplissent tout seuls depuis la collection Métiers ; les coordonnées viennent de Coordonnées.',
       en: 'Visible on: the footer of every page. The « Nos métiers » links fill in automatically from the Services collection; the contact details come from Contact details.',
@@ -42,9 +47,8 @@ export const FooterGlobal: GlobalConfig = {
     },
   },
   hooks: {
-    afterChange: [revalidateHomeGlobal],
+    afterChange: [revalidateHomeGlobal, logGlobalChange],
   },
-  lockDocuments: false,
   versions: {
     drafts: { autosave: { interval: 1000 } },
     max: 30,

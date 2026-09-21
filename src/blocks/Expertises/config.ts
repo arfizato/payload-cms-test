@@ -1,6 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { canEdit, hideUnless } from '@/access'
 import { GROUP } from '@/admin/i18n'
+import { logGlobalChange } from '@/hooks/logActivity'
 import { revalidateHomeGlobal } from '@/hooks/revalidateHome'
 
 /**
@@ -18,9 +20,12 @@ export const ExpertisesGlobal: GlobalConfig = {
   label: { fr: 'Nos métiers (titre)', en: 'Nos métiers (heading)' },
   access: {
     read: () => true,
+    update: canEdit('expertises'),
+    readVersions: canEdit('expertises'),
   },
   admin: {
     group: GROUP.home,
+    hidden: hideUnless('expertises'),
     description: {
       fr: 'Visible sur : la page d’accueil uniquement — le titre au-dessus de la section Nos métiers. Les métiers eux-mêmes se modifient dans Contenu → Métiers.',
       en: 'Visible on: the homepage only — the heading above the Nos métiers section. The services themselves are edited in Content → Services.',
@@ -43,11 +48,8 @@ export const ExpertisesGlobal: GlobalConfig = {
     },
   },
   hooks: {
-    afterChange: [revalidateHomeGlobal],
+    afterChange: [revalidateHomeGlobal, logGlobalChange],
   },
-  // Single-editor site: locking exists to stop concurrent editors colliding, and
-  // its two-step insert races under rapid autosave.
-  lockDocuments: false,
   versions: {
     // 200ms fired five times a second and, with live preview's mergeData calls on
     // top, was enough to lose that race. 1s is imperceptible while editing.

@@ -9,6 +9,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
+import { ActivityLog } from './collections/ActivityLog'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Services } from './collections/Services'
@@ -42,7 +43,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Media, Services, Projects, Clients],
+  collections: [Users, Media, Services, Projects, Clients, ActivityLog],
   globals: [SiteInfoGlobal, StatsGlobal, ExpertisesGlobal, FooterGlobal],
   // Each user picks their language on their account page; a first login follows
   // the browser. French is the fallback because the client's team works in it.

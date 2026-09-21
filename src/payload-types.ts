@@ -72,6 +72,7 @@ export interface Config {
     services: Service;
     projects: Project;
     clients: Client;
+    'activity-log': ActivityLog;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -85,6 +86,7 @@ export interface Config {
     services: ServicesSelect<false> | ServicesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     clients: ClientsSelect<false> | ClientsSelect<true>;
+    'activity-log': ActivityLogSelect<false> | ActivityLogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -147,6 +149,18 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * Shown in the panel and in the activity log. Falls back to the email address.
+   */
+  name?: string | null;
+  /**
+   * An admin can change everything, including users. An editor only sees the sections ticked below.
+   */
+  role: 'admin' | 'editor';
+  /**
+   * Sections left unticked do not appear in this user’s menu. Deleting stays admin-only.
+   */
+  sections?: ('projects' | 'services' | 'clients' | 'expertises' | 'stats' | 'footer' | 'site-info')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -306,6 +320,24 @@ export interface Client {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * History of publishes, deletions and permission changes. Filled in automatically, read-only.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity-log".
+ */
+export interface ActivityLog {
+  id: number;
+  userLabel?: string | null;
+  action?: ('created' | 'published' | 'unpublished' | 'updated' | 'deleted' | 'permissions') | null;
+  section?:
+    ('projects' | 'services' | 'clients' | 'expertises' | 'stats' | 'footer' | 'site-info' | 'media' | 'users') | null;
+  documentTitle?: string | null;
+  user?: (number | null) | User;
+  documentId?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -428,6 +460,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'clients';
+        value: number | Client;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -476,6 +520,9 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  sections?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -565,6 +612,20 @@ export interface ClientsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity-log_select".
+ */
+export interface ActivityLogSelect<T extends boolean = true> {
+  userLabel?: T;
+  action?: T;
+  section?: T;
+  documentTitle?: T;
+  user?: T;
+  documentId?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

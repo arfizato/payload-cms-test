@@ -1,6 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
+import { adminOnly, canEdit, hideUnless } from '@/access'
 import { GROUP, ORDER } from '@/admin/i18n'
+import { logCollectionChange, logCollectionDelete } from '@/hooks/logActivity'
 import { revalidateHomeCollection } from '@/hooks/revalidateHome'
 
 /**
@@ -19,12 +21,14 @@ export const Clients: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    create: canEdit('clients'),
+    update: canEdit('clients'),
+    readVersions: canEdit('clients'),
+    delete: adminOnly,
   },
   admin: {
     group: GROUP.content,
+    hidden: hideUnless('clients'),
     useAsTitle: 'name',
     defaultColumns: ['name', 'order', 'updatedAt'],
     description: {
@@ -32,9 +36,9 @@ export const Clients: CollectionConfig = {
       en: 'Visible on: the logo strip under the banner, on every page.',
     },
   },
-  lockDocuments: false,
   hooks: {
-    afterChange: [revalidateHomeCollection],
+    afterChange: [revalidateHomeCollection, logCollectionChange],
+    afterDelete: [logCollectionDelete],
   },
   versions: {
     drafts: true,

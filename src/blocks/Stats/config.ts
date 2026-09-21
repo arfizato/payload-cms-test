@@ -1,6 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { canEdit, hideUnless } from '@/access'
 import { GROUP, OPTIONAL } from '@/admin/i18n'
+import { logGlobalChange } from '@/hooks/logActivity'
 import { revalidateHomeGlobal } from '@/hooks/revalidateHome'
 
 /**
@@ -15,9 +17,12 @@ export const StatsGlobal: GlobalConfig = {
   label: { fr: 'Chiffres clés', en: 'Key figures' },
   access: {
     read: () => true,
+    update: canEdit('stats'),
+    readVersions: canEdit('stats'),
   },
   admin: {
     group: GROUP.home,
+    hidden: hideUnless('stats'),
     description: {
       fr: 'Visible sur : la page d’accueil uniquement — la bande de chiffres.',
       en: 'Visible on: the homepage only — the band of figures.',
@@ -40,11 +45,8 @@ export const StatsGlobal: GlobalConfig = {
     },
   },
   hooks: {
-    afterChange: [revalidateHomeGlobal],
+    afterChange: [revalidateHomeGlobal, logGlobalChange],
   },
-  // Single-editor site: locking exists to stop concurrent editors colliding, and
-  // its two-step insert races under rapid autosave.
-  lockDocuments: false,
   versions: {
     // 200ms fired five times a second and, with live preview's mergeData calls on
     // top, was enough to lose that race. 1s is imperceptible while editing.

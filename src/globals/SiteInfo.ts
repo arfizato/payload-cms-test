@@ -1,6 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { canEdit, hideUnless } from '@/access'
 import { GROUP } from '@/admin/i18n'
+import { logGlobalChange } from '@/hooks/logActivity'
 import { revalidateHomeGlobal } from '@/hooks/revalidateHome'
 
 /**
@@ -17,9 +19,12 @@ export const SiteInfoGlobal: GlobalConfig = {
   label: { fr: 'Coordonnées', en: 'Contact details' },
   access: {
     read: () => true,
+    update: canEdit('site-info'),
+    readVersions: canEdit('site-info'),
   },
   admin: {
     group: GROUP.site,
+    hidden: hideUnless('site-info'),
     description: {
       fr: 'Visible sur : le pied de page de toutes les pages, et la section Contact de la page d’accueil (adresse, téléphone, e-mail et la carte).',
       en: 'Visible on: the footer of every page, and the Contact section of the homepage (address, phone, email and the map).',
@@ -41,9 +46,8 @@ export const SiteInfoGlobal: GlobalConfig = {
     },
   },
   hooks: {
-    afterChange: [revalidateHomeGlobal],
+    afterChange: [revalidateHomeGlobal, logGlobalChange],
   },
-  lockDocuments: false,
   versions: {
     drafts: { autosave: { interval: 1000 } },
     max: 30,

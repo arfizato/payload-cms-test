@@ -1,7 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
+import { adminOnly, canEdit, hideUnless } from '@/access'
 import { GROUP, ORDER } from '@/admin/i18n'
 import { PROJECT_CATEGORIES } from '@/blocks/Projects/categories'
+import { logCollectionChange, logCollectionDelete } from '@/hooks/logActivity'
 import { revalidateHomeCollection } from '@/hooks/revalidateHome'
 
 /** "EY Ernst & Young" → "ey-ernst-young" */
@@ -28,12 +30,16 @@ export const Projects: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    create: canEdit('projects'),
+    update: canEdit('projects'),
+    readVersions: canEdit('projects'),
+    // Deleting takes the version history with it — the one action the panel
+    // cannot undo.
+    delete: adminOnly,
   },
   admin: {
     group: GROUP.content,
+    hidden: hideUnless('projects'),
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'city', 'featured', 'order'],
     description: {
@@ -41,9 +47,9 @@ export const Projects: CollectionConfig = {
       en: 'Visible on: the Nos projets page (all of them), and the homepage carousel (only those ticked “Show on the homepage”).',
     },
   },
-  lockDocuments: false,
   hooks: {
-    afterChange: [revalidateHomeCollection],
+    afterChange: [revalidateHomeCollection, logCollectionChange],
+    afterDelete: [logCollectionDelete],
   },
   versions: {
     drafts: true,
