@@ -39,8 +39,10 @@ export const adaptFooter = (
   servicesTitle: doc.servicesTitle ?? undefined,
   services: services.map((service) => ({
     label: service.title,
-    // No detail pages yet, so these point at the homepage section.
-    href: '#expertises',
+    // No per-métier detail pages yet, and the Metiers block renders one section
+    // for all of them rather than an anchor each, so every row points at the
+    // métiers page itself rather than the homepage expertises section.
+    href: '/metiers',
   })),
   contactTitle: doc.contactTitle ?? undefined,
   // `inFooter` lets an editor keep opening hours out of the footer while still

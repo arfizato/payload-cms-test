@@ -148,8 +148,8 @@ export const FooterGlobal: GlobalConfig = {
         plural: { fr: 'Liens', en: 'Links' },
       },
       defaultValue: [
-        { label: 'A propos', href: '#a-propos' },
-        { label: 'Nos métiers', href: '#expertises' },
+        { label: 'A propos', href: '/a-propos' },
+        { label: 'Nos métiers', href: '/metiers' },
         { label: 'Nos projets', href: '/projets' },
         { label: 'Actualités', href: '#actualites' },
         { label: 'Contact', href: '#contact' },
