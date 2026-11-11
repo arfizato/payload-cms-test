@@ -24,6 +24,9 @@
   # dashboard, since Netlify cannot unmark a variable once it is secret.
   SECRETS_SCAN_OMIT_KEYS = "cloudflare_r2,R2_BUCKET"
   # Turbopack's build cache records the env values it was built with, real
-  # secrets included. Netlify keeps it as private build cache and never deploys
-  # it; the deployed files contain none of the real secrets.
-  SECRETS_SCAN_OMIT_PATHS = ".next/cache/"
+  # secrets included. The Next.js runtime moves .next to .netlify/.next before
+  # the scan, saves cache/ to Netlify's private build cache, and deploys only
+  # .netlify/static plus the server function, neither of which includes cache/.
+  # The scanner matches the start of the path (or a full glob), not a substring,
+  # so this must be the full path from the repo root.
+  SECRETS_SCAN_OMIT_PATHS = ".netlify/.next/cache/"
