@@ -2,7 +2,7 @@ import { revalidatePath } from 'next/cache'
 import type { CollectionAfterChangeHook, GlobalAfterChangeHook } from 'payload'
 
 /** Routes whose output depends on CMS content. */
-const PATHS = ['/', '/projets', '/metiers', '/contact', '/next/content-version']
+const PATHS = ['/', '/projets', '/metiers', '/contact', '/a-propos', '/next/content-version']
 
 const revalidate = (reason: string): void => {
   try {
