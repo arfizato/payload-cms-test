@@ -101,12 +101,16 @@ export interface Config {
     'site-info': SiteInfo;
     stats: Stat;
     expertises: Expertise;
+    'founder-quote': FounderQuote;
+    certifications: Certification;
     footer: Footer;
   };
   globalsSelect: {
     'site-info': SiteInfoSelect<false> | SiteInfoSelect<true>;
     stats: StatsSelect<false> | StatsSelect<true>;
     expertises: ExpertisesSelect<false> | ExpertisesSelect<true>;
+    'founder-quote': FounderQuoteSelect<false> | FounderQuoteSelect<true>;
+    certifications: CertificationsSelect<false> | CertificationsSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: null;
@@ -160,7 +164,19 @@ export interface User {
   /**
    * Sections left unticked do not appear in this user’s menu. Deleting stays admin-only.
    */
-  sections?: ('projects' | 'services' | 'clients' | 'expertises' | 'stats' | 'footer' | 'site-info')[] | null;
+  sections?:
+    | (
+        | 'projects'
+        | 'services'
+        | 'clients'
+        | 'expertises'
+        | 'stats'
+        | 'founder-quote'
+        | 'certifications'
+        | 'footer'
+        | 'site-info'
+      )[]
+    | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -330,7 +346,20 @@ export interface ActivityLog {
   userLabel?: string | null;
   action?: ('created' | 'published' | 'unpublished' | 'updated' | 'deleted' | 'permissions') | null;
   section?:
-    ('projects' | 'services' | 'clients' | 'expertises' | 'stats' | 'footer' | 'site-info' | 'media' | 'users') | null;
+    | (
+        | 'projects'
+        | 'services'
+        | 'clients'
+        | 'expertises'
+        | 'stats'
+        | 'founder-quote'
+        | 'certifications'
+        | 'footer'
+        | 'site-info'
+        | 'media'
+        | 'users'
+      )
+    | null;
   documentTitle?: string | null;
   user?: (number | null) | User;
   documentId?: string | null;
@@ -730,7 +759,7 @@ export interface SiteInfo {
   createdAt?: string | null;
 }
 /**
- * Visible on: the homepage only — the band of figures.
+ * Visible on: the homepage and the À propos page — the band of figures.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "stats".
@@ -738,7 +767,7 @@ export interface SiteInfo {
 export interface Stat {
   id: number;
   /**
-   * Shown left to right in the red band. Drag them to reorder.
+   * Shown left to right in the black band. Drag them to reorder.
    */
   items?:
     | {
@@ -778,6 +807,71 @@ export interface Expertise {
   headingLines?:
     | {
         text: string;
+        id?: string | null;
+      }[]
+    | null;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Visible on: the À propos page — the outlined quote on the black band.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "founder-quote".
+ */
+export interface FounderQuote {
+  id: number;
+  /**
+   * No quote marks — the frame already does that. Roughly four to six lines.
+   */
+  quote: string;
+  authorName: string;
+  /**
+   * Optional.
+   */
+  authorRole?: string | null;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Visible on: the À propos page — the exclusively distributed European brands.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "certifications".
+ */
+export interface Certification {
+  id: number;
+  /**
+   * Optional.
+   */
+  badge?: string | null;
+  /**
+   * One line per row: this is where the heading breaks, not a wrap.
+   */
+  headingLines?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional.
+   */
+  lede?: string | null;
+  /**
+   * Two cards per row, alternating wide and narrow. Drag them to reorder.
+   */
+  items?:
+    | {
+        brand: string;
+        /**
+         * Shown in the dark strip at the foot of the card. Leave empty to hide the strip.
+         */
+        certification?: string | null;
+        heading: string;
+        body?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -881,6 +975,46 @@ export interface ExpertisesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "founder-quote_select".
+ */
+export interface FounderQuoteSelect<T extends boolean = true> {
+  quote?: T;
+  authorName?: T;
+  authorRole?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "certifications_select".
+ */
+export interface CertificationsSelect<T extends boolean = true> {
+  badge?: T;
+  headingLines?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  lede?: T;
+  items?:
+    | T
+    | {
+        brand?: T;
+        certification?: T;
+        heading?: T;
+        body?: T;
+        id?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
@@ -926,7 +1060,7 @@ export interface TaskSchedulePublish {
   input: {
     type?: ('publish' | 'unpublish') | null;
     locale?: string | null;
-    global?: ('stats' | 'expertises') | null;
+    global?: ('stats' | 'expertises' | 'founder-quote' | 'certifications') | null;
     user?: (number | null) | User;
   };
   output?: unknown;

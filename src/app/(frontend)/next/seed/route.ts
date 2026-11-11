@@ -2,7 +2,9 @@ import { getPayload } from 'payload'
 
 import config from '@/payload.config'
 import { clientLogosPlaceholder } from '@/blocks/ClientLogos'
+import { certificationsPlaceholder } from '@/blocks/Certifications'
 import { expertisesPlaceholder } from '@/blocks/Expertises'
+import { founderQuotePlaceholder } from '@/blocks/FounderQuote'
 import { statsPlaceholder } from '@/blocks/Stats'
 
 /**
@@ -45,6 +47,40 @@ export async function GET(req: Request): Promise<Response> {
     await payload.updateGlobal({ slug: 'stats', data: { items: statsPlaceholder.items } })
     await payload.updateGlobal({ slug: 'stats', data: { _status: 'published' } })
     seeded.push(`stats (${statsPlaceholder.items.length})`)
+  }
+
+  // --- founder quote -----------------------------------------------------
+  // Above the services early-return below, so an existing site still picks this
+  // up: the quote arrived long after the services did.
+  const existingQuote = await payload.findGlobal({ slug: 'founder-quote', depth: 0 })
+  if (!existingQuote.quote) {
+    await payload.updateGlobal({
+      slug: 'founder-quote',
+      data: {
+        quote: founderQuotePlaceholder.quote,
+        authorName: founderQuotePlaceholder.author.name,
+        authorRole: founderQuotePlaceholder.author.role,
+      },
+    })
+    await payload.updateGlobal({ slug: 'founder-quote', data: { _status: 'published' } })
+    seeded.push('founder-quote')
+  }
+
+  // --- certified products --------------------------------------------------
+  // Also above the services early-return, for the same reason as the quote.
+  const existingCerts = await payload.findGlobal({ slug: 'certifications', depth: 0 })
+  if (!existingCerts.items?.length) {
+    await payload.updateGlobal({
+      slug: 'certifications',
+      data: {
+        badge: certificationsPlaceholder.badge,
+        headingLines: certificationsPlaceholder.titleLines.map((text) => ({ text })),
+        lede: certificationsPlaceholder.lede,
+        items: certificationsPlaceholder.items,
+      },
+    })
+    await payload.updateGlobal({ slug: 'certifications', data: { _status: 'published' } })
+    seeded.push(`certifications (${certificationsPlaceholder.items.length})`)
   }
 
   // --- clients ---------------------------------------------------------

@@ -17,6 +17,8 @@ import { Projects } from './collections/Projects'
 import { Clients } from './collections/Clients'
 import { ExpertisesGlobal } from './blocks/Expertises/config'
 import { StatsGlobal } from './blocks/Stats/config'
+import { FounderQuoteGlobal } from './blocks/FounderQuote/config'
+import { CertificationsGlobal } from './blocks/Certifications/config'
 import { FooterGlobal } from './blocks/Footer/config'
 import { SiteInfoGlobal } from './globals/SiteInfo'
 
@@ -44,7 +46,14 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Services, Projects, Clients, ActivityLog],
-  globals: [SiteInfoGlobal, StatsGlobal, ExpertisesGlobal, FooterGlobal],
+  globals: [
+    SiteInfoGlobal,
+    StatsGlobal,
+    ExpertisesGlobal,
+    FounderQuoteGlobal,
+    CertificationsGlobal,
+    FooterGlobal,
+  ],
   // Each user picks their language on their account page; a first login follows
   // the browser. French is the fallback because the client's team works in it.
   // Our own labels are { fr, en } pairs — the shared ones are in src/admin/i18n.ts.
