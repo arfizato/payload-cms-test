@@ -7,6 +7,8 @@ import * as migration_20260908_184129_add_clients from './20260908_184129_add_cl
 import * as migration_20260908_192808_add_project_category from './20260908_192808_add_project_category';
 import * as migration_20260908_200907_add_service_gallery from './20260908_200907_add_service_gallery';
 import * as migration_20260920_185521_add_roles_and_activity_log from './20260920_185521_add_roles_and_activity_log';
+import * as migration_20261111_173819_add_founder_quote from './20261111_173819_add_founder_quote';
+import * as migration_20261111_182652_add_certifications from './20261111_182652_add_certifications';
 
 export const migrations = [
   {
@@ -52,6 +54,16 @@ export const migrations = [
   {
     up: migration_20260920_185521_add_roles_and_activity_log.up,
     down: migration_20260920_185521_add_roles_and_activity_log.down,
-    name: '20260920_185521_add_roles_and_activity_log'
+    name: '20260920_185521_add_roles_and_activity_log',
+  },
+  {
+    up: migration_20261111_173819_add_founder_quote.up,
+    down: migration_20261111_173819_add_founder_quote.down,
+    name: '20261111_173819_add_founder_quote',
+  },
+  {
+    up: migration_20261111_182652_add_certifications.up,
+    down: migration_20261111_182652_add_certifications.down,
+    name: '20261111_182652_add_certifications'
   },
 ];

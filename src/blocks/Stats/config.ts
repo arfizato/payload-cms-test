@@ -6,7 +6,7 @@ import { logGlobalChange } from '@/hooks/logActivity'
 import { revalidateHomeGlobal } from '@/hooks/revalidateHome'
 
 /**
- * Editable source for the red statistics band.
+ * Editable source for the statistics band.
  *
  * A global: there is one of these, with fixed slots. Each row is one figure;
  * the number counts up on screen, so `value` must stay numeric — the prefix and
@@ -24,8 +24,8 @@ export const StatsGlobal: GlobalConfig = {
     group: GROUP.home,
     hidden: hideUnless('stats'),
     description: {
-      fr: 'Visible sur : la page d’accueil uniquement — la bande de chiffres.',
-      en: 'Visible on: the homepage only — the band of figures.',
+      fr: 'Visible sur : la page d’accueil et la page À propos — la bande de chiffres.',
+      en: 'Visible on: the homepage and the À propos page — the band of figures.',
     },
     components: {
       elements: {
@@ -66,8 +66,8 @@ export const StatsGlobal: GlobalConfig = {
       },
       admin: {
         description: {
-          fr: 'Affichés de gauche à droite dans la bande rouge. Faites-les glisser pour changer l’ordre.',
-          en: 'Shown left to right in the red band. Drag them to reorder.',
+          fr: 'Affichés de gauche à droite dans la bande noire. Faites-les glisser pour changer l’ordre.',
+          en: 'Shown left to right in the black band. Drag them to reorder.',
         },
       },
       fields: [

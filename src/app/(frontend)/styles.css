@@ -17,6 +17,11 @@
   --color-cream: #fbf9ee;
   /* The single red in the design system. */
   --color-accent: #a91e23;
+  /* Warm counterpart to the accent, used only as a gradient stop. The "Quatre
+     entités" cards tint two of the four, one toward the accent and one toward
+     this; measured off the design, where the second tint is visibly oranger
+     than the red. Never use it for text or a solid fill. */
+  --color-ember: #ad2a07;
   /* Muted blue-grey for secondary links. */
   --color-muted: #8d99ae;
   /* The dark of the same blue-grey family, used for the /projets page title and

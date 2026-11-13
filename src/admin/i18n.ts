@@ -16,6 +16,7 @@
 export const GROUP = {
   content: { fr: 'Contenu', en: 'Content' },
   home: { fr: 'Page d’accueil', en: 'Homepage' },
+  about: { fr: 'Page À propos', en: 'About page' },
   site: { fr: 'Tout le site', en: 'Whole site' },
   files: { fr: 'Fichiers', en: 'Files' },
   admin: { fr: 'Administration', en: 'Administration' },
