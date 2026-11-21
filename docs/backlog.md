@@ -200,20 +200,20 @@ Ordering below is by risk, not by how interesting the work is.
       free-text line printed on the card ("Multinationale. Tunis."), `category` is the
       filter bucket ("Multinationales").
 
-- [ ] **20. Témoignages and Équipe → collections**
-      Both sections are built and placeholder-driven (`src/blocks/Testimonials`,
-      `src/blocks/Team`) — the design-first pass. Both are many-of, editor-managed, so
-      both are collections when wired, and both need adding to `SITE_PAGES` in
-      `src/admin/pages.ts` at the same time.
+- [x] **20. Témoignages and Équipe → collections** — wired, content still placeholder.
+      `testimonials` and `team-members` collections (migration
+      `20261121_184329_add_testimonials_and_team`), both in `SECTIONS` and `SITE_PAGES`.
+      A testimonial's image is a client **logo** or a portrait **avatar**, chosen by an
+      `imageKind` select beside the upload. The homepage shows the first four team
+      members by `order`; /a-propos shows everyone, eight at a time.
+      The section headings stay in code (`CHROME` in Testimonials/adapt.ts, the page
+      files for Team), per item 18.
 
-      **Blocking: real content.** Every testimonial is the designer's placeholder copy
-      attributed to a real company (Ooredoo, PwC, EY) — it must not go live as is. The
-      team names are real but the photos are stock portraits. The design's lede under
-      "Ils nous font confiance" repeated the team section's text, so it was left out.
-
-      When wiring: a testimonial's image is either a client **logo** (feedback asked for
-      these) or a portrait **avatar** — a `select` beside the upload, not two fields. The
-      team needs an `order` field; the homepage shows the first four.
+      **Still blocking launch: real content.** The seeded testimonials are the
+      designer's placeholder quotes attributed to real companies (Ooredoo, PwC, EY) and
+      must be replaced in the admin. The team names are real but the photos are stock
+      portraits. The design's lede under "Ils nous font confiance" repeated the team
+      section's text, so it was left out.
 
 ---
 

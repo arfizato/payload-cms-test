@@ -12,7 +12,7 @@ import { FounderQuote, adaptFounderQuote } from '@/blocks/FounderQuote'
 import { MissionVision } from '@/blocks/MissionVision'
 import { Hero } from '@/blocks/Hero'
 import { Stats, adaptStats } from '@/blocks/Stats'
-import { Team, teamMembersPlaceholder } from '@/blocks/Team'
+import { Team, adaptTeamMembers } from '@/blocks/Team'
 import { Values } from '@/blocks/Values'
 import { Navbar, navbarPlaceholder } from '@/components/Navbar'
 import { asset } from '@/utilities/asset'
@@ -169,16 +169,15 @@ const entities = {
 }
 
 /**
- * "Notre équipe". The chrome is fixed copy like the sections above; the people
- * are placeholder data until the team becomes a collection (see
- * blocks/Team/placeholder.ts). Eight show, then "Voir plus" reveals the rest on
- * the page — feedback asked for it to load in place rather than navigate.
+ * "Notre équipe". The heading is fixed copy like the sections above; the people
+ * come from the `team-members` collection. Eight show, then "Voir plus" reveals
+ * the rest on the page — feedback asked for it to load in place rather than
+ * navigate.
  */
-const team = {
+const teamChrome = {
   badge: 'Notre équipe',
   titleLines: ['Les profils derrière', 'chaque projet.'],
   lede: 'Plus de 20 experts — architectes d’intérieur, graphistes, project managers, poseurs et techniciens spécialisés — avec une moyenne de 10 ans d’expérience dans l’espace professionnel.',
-  members: teamMembersPlaceholder,
   variant: 'full' as const,
   initialCount: 8,
 }
@@ -200,6 +199,7 @@ export default async function AboutPage() {
     statsDoc,
     founderQuoteDoc,
     certificationsDoc,
+    teamResult,
   ] = await Promise.all([
       payload.findGlobal({ slug: 'footer', depth: 0 }),
       payload.findGlobal({ slug: 'site-info', depth: 0 }),
@@ -209,6 +209,8 @@ export default async function AboutPage() {
       payload.findGlobal({ slug: 'stats', depth: 0 }),
       payload.findGlobal({ slug: 'founder-quote', depth: 0 }),
       payload.findGlobal({ slug: 'certifications', depth: 0 }),
+      // depth 1 populates each photo.
+      payload.find({ collection: 'team-members', depth: 1, limit: 200, sort: 'order' }),
     ])
 
   return (
@@ -222,7 +224,7 @@ export default async function AboutPage() {
       <Values {...values} />
       <Entities {...entities} />
       <Certifications {...adaptCertifications(certificationsDoc)} cta={certificationsCta} />
-      <Team {...team} />
+      <Team {...teamChrome} members={adaptTeamMembers(teamResult.docs)} />
       {/* The design places the stats band low on this page, between the team
           and the contact form — not under the hero as on the homepage. */}
       <Stats {...adaptStats(statsDoc)} />

@@ -7,6 +7,8 @@ import { adaptExpertises, type ExpertisesProps } from '@/blocks/Expertises'
 import { adaptFooter, type FooterProps } from '@/blocks/Footer'
 import { adaptProjects, type ProjectsProps } from '@/blocks/Projects'
 import { adaptStats, type StatsProps } from '@/blocks/Stats'
+import { adaptTeamMembers, type TeamMember } from '@/blocks/Team'
+import { adaptTestimonials, type TestimonialsProps } from '@/blocks/Testimonials'
 import type {
   Client as PayloadClient,
   Expertise as PayloadExpertises,
@@ -15,6 +17,8 @@ import type {
   Service as PayloadService,
   SiteInfo as PayloadSiteInfo,
   Stat as PayloadStats,
+  TeamMember as PayloadTeamMember,
+  Testimonial as PayloadTestimonial,
 } from '@/payload-types'
 
 export type HomeData = {
@@ -24,6 +28,8 @@ export type HomeData = {
   projects: ProjectsProps
   expertises: ExpertisesProps
   stats: StatsProps
+  team: TeamMember[]
+  testimonials: TestimonialsProps
 }
 
 export type HomeDocs = {
@@ -34,6 +40,8 @@ export type HomeDocs = {
   expertisesDoc: PayloadExpertises
   services: PayloadService[]
   statsDoc: PayloadStats
+  teamMembers: PayloadTeamMember[]
+  testimonials: PayloadTestimonial[]
 }
 
 /** depth 1 on expertises is load-bearing — see getHomeDocs. */
@@ -52,8 +60,17 @@ export const STATS_DEPTH = 0
 export const getHomeDocs = async ({ draft }: { draft: boolean }): Promise<HomeDocs> => {
   const payload = await getPayload({ config: await config })
 
-  const [expertisesDoc, statsDoc, footerDoc, siteInfo, clientsResult, servicesResult, projectsResult] =
-    await Promise.all([
+  const [
+    expertisesDoc,
+    statsDoc,
+    footerDoc,
+    siteInfo,
+    clientsResult,
+    servicesResult,
+    projectsResult,
+    testimonialsResult,
+    teamResult,
+  ] = await Promise.all([
     payload.findGlobal({ slug: 'expertises', draft, depth: EXPERTISES_DEPTH }),
     payload.findGlobal({ slug: 'stats', draft, depth: STATS_DEPTH }),
     payload.findGlobal({ slug: 'footer', draft, depth: 0 }),
@@ -76,6 +93,11 @@ export const getHomeDocs = async ({ draft }: { draft: boolean }): Promise<HomeDo
       sort: 'order',
       where: { featured: { equals: true } },
     }),
+    // depth 1 populates the logo or portrait beside each name.
+    payload.find({ collection: 'testimonials', draft, depth: 1, limit: 30, sort: 'order' }),
+    // The homepage teaser shows the first four by display order, so it fetches
+    // no more than that.
+    payload.find({ collection: 'team-members', draft, depth: 1, limit: 4, sort: 'order' }),
   ])
 
   return {
@@ -86,6 +108,8 @@ export const getHomeDocs = async ({ draft }: { draft: boolean }): Promise<HomeDo
     projects: projectsResult.docs,
     services: servicesResult.docs,
     statsDoc,
+    teamMembers: teamResult.docs,
+    testimonials: testimonialsResult.docs,
   }
 }
 
@@ -94,8 +118,17 @@ export const getHomeDocs = async ({ draft }: { draft: boolean }): Promise<HomeDo
  * live updates to apply.
  */
 export const getHomeData = async ({ draft }: { draft: boolean }): Promise<HomeData> => {
-  const { clients, expertisesDoc, footerDoc, projects, services, siteInfo, statsDoc } =
-    await getHomeDocs({ draft })
+  const {
+    clients,
+    expertisesDoc,
+    footerDoc,
+    projects,
+    services,
+    siteInfo,
+    statsDoc,
+    teamMembers,
+    testimonials,
+  } = await getHomeDocs({ draft })
 
   return {
     expertises: adaptExpertises(expertisesDoc, services),
@@ -104,5 +137,7 @@ export const getHomeData = async ({ draft }: { draft: boolean }): Promise<HomeDa
     footer: adaptFooter(footerDoc, services, siteInfo),
     projects: adaptProjects(projects),
     stats: adaptStats(statsDoc),
+    team: adaptTeamMembers(teamMembers),
+    testimonials: adaptTestimonials(testimonials),
   }
 }

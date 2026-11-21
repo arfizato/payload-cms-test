@@ -6,6 +6,8 @@ import { certificationsPlaceholder } from '@/blocks/Certifications'
 import { expertisesPlaceholder } from '@/blocks/Expertises'
 import { founderQuotePlaceholder } from '@/blocks/FounderQuote'
 import { statsPlaceholder } from '@/blocks/Stats'
+import { teamMembersPlaceholder } from '@/blocks/Team'
+import { testimonialsPlaceholder } from '@/blocks/Testimonials'
 
 /**
  * One-shot seed for a fresh database.
@@ -81,6 +83,82 @@ export async function GET(req: Request): Promise<Response> {
     })
     await payload.updateGlobal({ slug: 'certifications', data: { _status: 'published' } })
     seeded.push(`certifications (${certificationsPlaceholder.items.length})`)
+  }
+
+  /**
+   * Fetches a placeholder image from its R2 URL and re-uploads it through
+   * Payload, so it goes through the storage adapter like an editor's upload.
+   * Returns null when the file cannot be fetched; the caller decides whether
+   * that entry can live without its image.
+   */
+  const uploadFromUrl = async (src: string, alt: string): Promise<number | null> => {
+    const res = await fetch(src)
+    if (!res.ok) return null
+
+    const data = Buffer.from(await res.arrayBuffer())
+    const media = await payload.create({
+      collection: 'media',
+      data: { alt },
+      file: {
+        data,
+        name: src.split('/').pop() ?? 'image.webp',
+        mimetype: res.headers.get('content-type') ?? 'image/webp',
+        size: data.length,
+      },
+    })
+
+    return media.id
+  }
+
+  // --- testimonials -------------------------------------------------------
+  // Above the services early-return below, like the quote: an existing site
+  // picks these up too.
+  const existingTestimonials = await payload.count({ collection: 'testimonials' })
+  if (existingTestimonials.totalDocs === 0) {
+    for (const [index, item] of testimonialsPlaceholder.entries()) {
+      // The image is optional on a testimonial, so a failed fetch only loses it.
+      const image = item.image ? await uploadFromUrl(item.image.src, item.image.alt) : null
+
+      await payload.create({
+        collection: 'testimonials',
+        data: {
+          author: item.author,
+          role: item.role,
+          quote: item.quote,
+          rating: item.rating ?? 5,
+          imageKind: item.image?.kind ?? 'logo',
+          image,
+          order: index + 1,
+          _status: 'published',
+        },
+      })
+    }
+    seeded.push(`testimonials (${testimonialsPlaceholder.length})`)
+  }
+
+  // --- team ---------------------------------------------------------------
+  const existingTeam = await payload.count({ collection: 'team-members' })
+  if (existingTeam.totalDocs === 0) {
+    let written = 0
+    for (const [index, member] of teamMembersPlaceholder.entries()) {
+      // The photo is required, so a member whose photo cannot be fetched is
+      // skipped rather than failing the whole seed.
+      const photo = await uploadFromUrl(member.photo.src, member.photo.alt)
+      if (photo === null) continue
+
+      await payload.create({
+        collection: 'team-members',
+        data: {
+          name: member.name,
+          role: member.role,
+          photo,
+          order: index + 1,
+          _status: 'published',
+        },
+      })
+      written += 1
+    }
+    seeded.push(`team-members (${written})`)
   }
 
   // --- clients ---------------------------------------------------------

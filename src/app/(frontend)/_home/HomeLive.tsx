@@ -8,6 +8,8 @@ import { adaptExpertises } from '@/blocks/Expertises'
 import { adaptFooter } from '@/blocks/Footer'
 import { adaptProjects } from '@/blocks/Projects'
 import { adaptStats } from '@/blocks/Stats'
+import { adaptTeamMembers } from '@/blocks/Team'
+import { adaptTestimonials } from '@/blocks/Testimonials'
 import type {
   Client as PayloadClient,
   Expertise as PayloadExpertises,
@@ -16,6 +18,8 @@ import type {
   Service as PayloadService,
   SiteInfo as PayloadSiteInfo,
   Stat as PayloadStats,
+  TeamMember as PayloadTeamMember,
+  Testimonial as PayloadTestimonial,
 } from '@/payload-types'
 
 import { HomeView } from './HomeView'
@@ -29,6 +33,8 @@ type Props = {
   projects: PayloadProject[]
   services: PayloadService[]
   statsDoc: PayloadStats
+  teamMembers: PayloadTeamMember[]
+  testimonials: PayloadTestimonial[]
 }
 
 /**
@@ -39,13 +45,23 @@ type Props = {
  * whose image is not a populated object, so a shallower merge would blank the
  * carousel every time the editor typed.
  */
-export const HomeLive: React.FC<Props> = ({ clients, expertisesDoc, footerDoc, projects, services, siteInfo: siteInfoDoc, statsDoc }) => {
+export const HomeLive: React.FC<Props> = ({
+  clients,
+  expertisesDoc,
+  footerDoc,
+  projects,
+  services,
+  siteInfo: siteInfoDoc,
+  statsDoc,
+  teamMembers,
+  testimonials,
+}) => {
   const expertises = useGlobalPreview<PayloadExpertises>('expertises', expertisesDoc, 1)
   const stats = useGlobalPreview<PayloadStats>('stats', statsDoc, 0)
   const footer = useGlobalPreview<PayloadFooter>('footer', footerDoc, 0)
   const siteInfo = useGlobalPreview<PayloadSiteInfo>('site-info', siteInfoDoc, 0)
 
-  // Services are a collection, so they arrive on the page's own live-preview
+  // Services, testimonials and team members are collections, so they arrive on the page's own live-preview
   // channel only when that document is the one being edited. Editing a service
   // reloads this route rather than streaming in, which is acceptable — the
   // heading and figures are what an editor tweaks repeatedly.
@@ -57,6 +73,8 @@ export const HomeLive: React.FC<Props> = ({ clients, expertisesDoc, footerDoc, p
       footer={adaptFooter(footer, services, siteInfo)}
       projects={adaptProjects(projects)}
       stats={adaptStats(stats)}
+      team={adaptTeamMembers(teamMembers)}
+      testimonials={adaptTestimonials(testimonials)}
     />
   )
 }

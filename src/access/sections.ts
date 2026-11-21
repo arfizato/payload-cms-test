@@ -15,6 +15,8 @@ export const SECTIONS = [
   { value: 'projects', label: { fr: 'Réalisations', en: 'Projects' } },
   { value: 'services', label: { fr: 'Métiers', en: 'Services' } },
   { value: 'clients', label: { fr: 'Clients', en: 'Clients' } },
+  { value: 'testimonials', label: { fr: 'Témoignages', en: 'Testimonials' } },
+  { value: 'team-members', label: { fr: 'Équipe', en: 'Team' } },
   { value: 'expertises', label: { fr: 'Nos métiers (titre)', en: 'Nos métiers (heading)' } },
   { value: 'stats', label: { fr: 'Chiffres clés', en: 'Key figures' } },
   { value: 'founder-quote', label: { fr: 'Citation fondatrice', en: 'Founder quote' } },

@@ -72,6 +72,8 @@ export interface Config {
     services: Service;
     projects: Project;
     clients: Client;
+    testimonials: Testimonial;
+    'team-members': TeamMember;
     'activity-log': ActivityLog;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
@@ -86,6 +88,8 @@ export interface Config {
     services: ServicesSelect<false> | ServicesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     clients: ClientsSelect<false> | ClientsSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     'activity-log': ActivityLogSelect<false> | ActivityLogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -169,6 +173,8 @@ export interface User {
         | 'projects'
         | 'services'
         | 'clients'
+        | 'testimonials'
+        | 'team-members'
         | 'expertises'
         | 'stats'
         | 'founder-quote'
@@ -336,6 +342,62 @@ export interface Client {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Visible on: the homepage, "Ils nous font confiance" section, under the projects. Three show at a time; the arrows scroll to the rest.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  /**
+   * First name and surname initial, like the rest of the section.
+   */
+  author: string;
+  role?: string | null;
+  /**
+   * No quotation marks. The cards share one height, so past two or three sentences a card grows and pushes its neighbours.
+   */
+  quote: string;
+  imageKind: 'logo' | 'avatar';
+  rating: number;
+  /**
+   * Optional. A logo shows whole, 48px tall: a transparent PNG trimmed tight. A photo is cropped round: centre the face.
+   */
+  image?: (number | null) | Media;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Visible on: the homepage (the first four by display order) and the À propos page (everyone, eight at a time behind "Voir plus").
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: number;
+  /**
+   * Also used as the photo’s alt text.
+   */
+  name: string;
+  role?: string | null;
+  /**
+   * Shown square with the name over the bottom: centre the face, nothing important in the lower third. 800 × 800px is plenty.
+   */
+  photo: number | Media;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * History of publishes, deletions and permission changes. Filled in automatically, read-only.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -350,6 +412,8 @@ export interface ActivityLog {
         | 'projects'
         | 'services'
         | 'clients'
+        | 'testimonials'
+        | 'team-members'
         | 'expertises'
         | 'stats'
         | 'founder-quote'
@@ -501,6 +565,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'clients';
         value: number | Client;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'team-members';
+        value: number | TeamMember;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -637,6 +709,35 @@ export interface ClientsSelect<T extends boolean = true> {
   name?: T;
   logo?: T;
   website?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  author?: T;
+  role?: T;
+  quote?: T;
+  imageKind?: T;
+  rating?: T;
+  image?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members_select".
+ */
+export interface TeamMembersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  photo?: T;
   order?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -15,6 +15,8 @@ import { Media } from './collections/Media'
 import { Services } from './collections/Services'
 import { Projects } from './collections/Projects'
 import { Clients } from './collections/Clients'
+import { Testimonials } from './collections/Testimonials'
+import { TeamMembers } from './collections/TeamMembers'
 import { ExpertisesGlobal } from './blocks/Expertises/config'
 import { StatsGlobal } from './blocks/Stats/config'
 import { FounderQuoteGlobal } from './blocks/FounderQuote/config'
@@ -48,7 +50,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Media, Services, Projects, Clients, ActivityLog],
+  collections: [Users, Media, Services, Projects, Clients, Testimonials, TeamMembers, ActivityLog],
   globals: [
     SiteInfoGlobal,
     StatsGlobal,

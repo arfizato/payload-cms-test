@@ -51,6 +51,12 @@ const contact: PageSection = {
   slug: 'site-info',
 }
 
+const team: PageSection = {
+  label: { fr: 'Équipe', en: 'Team' },
+  type: 'collection',
+  slug: 'team-members',
+}
+
 const footer: PageSection = {
   label: { fr: 'Pied de page', en: 'Footer' },
   type: 'global',
@@ -75,6 +81,12 @@ export const SITE_PAGES: SitePage[] = [
         slug: 'services',
       },
       projects,
+      {
+        label: { fr: 'Témoignages', en: 'Testimonials' },
+        type: 'collection',
+        slug: 'testimonials',
+      },
+      team,
       contact,
       footer,
     ],
@@ -106,8 +118,9 @@ export const SITE_PAGES: SitePage[] = [
         type: 'global',
         slug: 'certifications',
       },
-      contact,
+      team,
       stats,
+      contact,
       footer,
     ],
   },
