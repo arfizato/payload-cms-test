@@ -59,7 +59,7 @@ export default async function MetiersPage() {
     <>
       <Navbar {...navbarPlaceholder} activeHref="/metiers" />
       <Hero {...hero} />
-      <ClientLogos {...adaptClientLogos(clientsResult.docs)} />
+      <ClientLogos {...adaptClientLogos(clientsResult.docs)} tone="dark" />
       <Metiers {...adaptMetiers(servicesResult.docs)} />
       <Contact {...adaptContact(siteInfo)} />
       <Footer {...adaptFooter(footerDoc, servicesResult.docs, siteInfo)} />

@@ -1,5 +1,5 @@
 export type Certification = {
-  /** The brand pill at the top of the card. */
+  /** The small label under the heading. */
   brand: string
   heading: string
   body: string
@@ -14,4 +14,10 @@ export type CertificationsProps = {
   titleLines: string[]
   lede?: string
   items: Certification[]
+  /**
+   * Centred button under the cards. Feedback asked for one leading to Nos
+   * métiers, so the reader goes from the products to the trades that fit them.
+   * Hardcoded by the page, like the other page chrome. Omit to hide it.
+   */
+  cta?: { label: string; href: string }
 }

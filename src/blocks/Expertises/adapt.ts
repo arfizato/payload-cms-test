@@ -1,4 +1,5 @@
 import type { Expertise as PayloadExpertises, Service as PayloadService } from '@/payload-types'
+import { metierHref } from '@/utilities/metierAnchor'
 
 import type { ExpertisesProps } from './types'
 
@@ -32,8 +33,17 @@ export const adaptExpertises = (
       {
         title: service.title,
         description: service.description ?? undefined,
+        // '#' is the field's default, meaning "not set". Unset, the link goes
+        // to this métier's own row on /metiers rather than nowhere — the
+        // homepage teaser should lead to the full description.
         link: service.linkLabel
-          ? { label: service.linkLabel, href: service.linkHref || '#' }
+          ? {
+              label: service.linkLabel,
+              href:
+                service.linkHref && service.linkHref !== '#'
+                  ? service.linkHref
+                  : metierHref(service.title),
+            }
           : undefined,
         image: {
           src: media.url,

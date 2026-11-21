@@ -63,7 +63,10 @@ export const Metiers: React.FC<MetiersProps> = ({ items }) => {
               // alone moves the photo into the other column but leaves the column
               // widths where they were, which made every second photo 39/61 the
               // size of its neighbours. The photo column is always the wide one.
-              className={`grid items-start gap-[clamp(24px,3vw,40px)] ${
+              // The homepage links straight to this row. The navbar is not
+              // fixed, so the margin is only breathing room above the number.
+              id={metier.anchor}
+              className={`grid scroll-mt-8 items-start gap-[clamp(24px,3vw,40px)] ${
                 copyFirst
                   ? 'lg:grid-cols-[minmax(0,39fr)_minmax(0,61fr)]'
                   : 'lg:grid-cols-[minmax(0,61fr)_minmax(0,39fr)]'

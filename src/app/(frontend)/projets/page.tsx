@@ -52,7 +52,7 @@ export default async function ProjectsPage() {
     <>
       <Navbar {...navbarPlaceholder} activeHref="/projets" />
       <Hero {...hero} />
-      <ClientLogos {...adaptClientLogos(clientsResult.docs)} />
+      <ClientLogos {...adaptClientLogos(clientsResult.docs)} tone="dark" />
       <div id="realisations">
         <ProjectsGrid items={projects.items} />
       </div>

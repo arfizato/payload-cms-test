@@ -1,4 +1,5 @@
 import type { Media, Service as PayloadService } from '@/payload-types'
+import { metierAnchor } from '@/utilities/metierAnchor'
 
 import type { MetierPhoto, MetiersProps } from './types'
 
@@ -42,6 +43,7 @@ export const adaptMetiers = (services: PayloadService[]): MetiersProps => ({
     return [
       {
         title: service.title,
+        anchor: metierAnchor(service.title),
         description: service.description ?? undefined,
         href,
         photos,

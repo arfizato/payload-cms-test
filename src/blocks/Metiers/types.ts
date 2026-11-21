@@ -7,6 +7,8 @@ export type MetierPhoto = {
 
 export type Metier = {
   title: string
+  /** The row's id, so `/metiers#<anchor>` lands on it. See utilities/metierAnchor. */
+  anchor: string
   description?: string
   /** Set only when the métier points somewhere real; the arrow is drawn either way. */
   href?: string

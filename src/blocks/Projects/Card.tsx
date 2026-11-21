@@ -26,22 +26,17 @@ const Corner: React.FC<{ size: number }> = ({ size }) => (
  * Same card, two looks — a variant rather than a second component, per
  * docs/content-architecture.md ("one section, several looks → variant").
  *
- * The index page is a wall of cards, so the design dials both red elements down:
- * the tags wash out and the link drops to the muted grey. The carousel sits under
- * a heading with only two cards showing, and keeps the red.
- *
- * Class strings are written out in full because Tailwind scans source text — a
- * composed `bg-accent/${n}` would not survive the build.
+ * The index page is a wall of cards, so the design dials the link down to the
+ * muted grey. The carousel sits under a heading with only two cards showing,
+ * and keeps the red.
  */
 const VARIANTS = {
   carousel: {
-    tag: 'bg-accent/8',
     link: 'text-[12px] tracking-[0.14em] text-accent',
     label: 'Lire',
     icon: 14,
   },
   index: {
-    tag: 'bg-accent/4',
     link: 'text-[14px] text-muted',
     label: 'Voire le projet',
     icon: 16,
@@ -75,11 +70,35 @@ export const ProjectCard: React.FC<{
       />
     </div>
 
-    {(project.sector || project.city) && (
-      <p className="mt-4 flex items-center gap-2 text-[13px] font-medium text-accent">
-        <span aria-hidden="true" className="inline-block size-2.5 bg-accent" />
-        {[project.sector, project.city].filter(Boolean).join('. ')}.
-      </p>
+    {/*
+      The meta row: sector on the left, the métier tags on the right.
+
+      The tags used to sit under the summary as padded pills; the client read
+      those as buttons. They are now hashtags — a tight 10% wash, no rounding,
+      no padding to speak of — so they read as labels, which is what they are.
+    */}
+    {(project.sector || project.city || project.tags.length > 0) && (
+      <div className="mt-4 flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+        {(project.sector || project.city) && (
+          <p className="flex items-center gap-2 text-[13px] font-medium text-accent">
+            <span aria-hidden="true" className="inline-block size-2.5 bg-accent" />
+            {[project.sector, project.city].filter(Boolean).join('. ')}.
+          </p>
+        )}
+
+        {project.tags.length > 0 && (
+          <ul className="ml-auto flex max-w-[60%] flex-wrap justify-end gap-x-2 gap-y-1.5 max-sm:ml-0 max-sm:max-w-none max-sm:justify-start">
+            {project.tags.map((tag) => (
+              <li
+                className="bg-accent/10 p-0.5 text-[12px] leading-[12px] font-semibold text-accent"
+                key={tag}
+              >
+                #{tag}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     )}
 
     <h3 className="mt-1 font-sans text-[clamp(1.25rem,1.7vw,1.55rem)] leading-tight font-bold tracking-[-0.01em]">
@@ -88,19 +107,6 @@ export const ProjectCard: React.FC<{
 
     {project.summary && (
       <p className="mt-1 max-w-[52ch] text-[15px] leading-[1.5] text-ink/80">{project.summary}</p>
-    )}
-
-    {project.tags.length > 0 && (
-      <ul className="mt-4 flex flex-wrap gap-2">
-        {project.tags.map((tag) => (
-          <li
-            className={`rounded-md px-3 py-2 text-[13px] font-medium text-accent ${VARIANTS[variant].tag}`}
-            key={tag}
-          >
-            {tag}
-          </li>
-        ))}
-      </ul>
     )}
 
     <a

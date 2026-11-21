@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react'
 
+import { CarouselArrow } from '@/components/CarouselArrow'
+
 import { ProjectCard } from './Card'
 import type { ProjectCardData } from './types'
 
@@ -37,11 +39,50 @@ export const Carousel: React.FC<{ items: ProjectCardData[] }> = ({ items }) => {
     return () => clearInterval(id)
   }, [lastIndex, paused])
 
+  // The side arrows wrap, like autoplay does, so neither end is a dead click.
+  const step = (delta: 1 | -1) =>
+    setIndex(() => {
+      const next = current + delta
+      if (next < 0) return lastIndex
+      if (next > lastIndex) return 0
+      return next
+    })
+
   // Pause on hover only. Pausing on focus as well looked identical but broke it:
   // clicking a dot focuses that button, focus then stays there, and autoplay
   // never resumed.
   return (
-    <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+    <div
+      className="@container relative"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/*
+        Side arrows, from the design: they overhang the outer cards by half
+        their width and sit level with the middle of the photo, not the card.
+        From `md` a slide is half the track less ~44px of gutter, and the photo
+        is 4:3, so its middle is (50cqw − 44px) × 3/8 ≈ 18.75cqw − 16px down.
+        Hidden below `md`, where one card shows and the dots do the job.
+      */}
+      {lastIndex > 0 && (
+        <>
+          <CarouselArrow
+            direction="previous"
+            label="Réalisation précédente"
+            onClick={() => step(-1)}
+            className="absolute top-[calc(18.75cqw-16px)] -left-[22px] z-10 -translate-y-1/2 max-md:hidden"
+          />
+          <CarouselArrow
+            direction="next"
+            label="Réalisation suivante"
+            onClick={() => step(1)}
+            // Each slide carries its gutter on the right, so the last card
+            // stops that far short of the track; centre on its edge, not ours.
+            className="absolute top-[calc(18.75cqw-16px)] right-[calc(clamp(24px,3vw,44px)-22px)] z-10 -translate-y-1/2 max-md:hidden"
+          />
+        </>
+      )}
+
       <div className="overflow-hidden">
         <div
           className="flex [--slide:100%] transition-transform duration-500 ease-out md:[--slide:50%]"

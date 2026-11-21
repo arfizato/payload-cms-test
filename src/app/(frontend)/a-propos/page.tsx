@@ -12,6 +12,7 @@ import { FounderQuote, adaptFounderQuote } from '@/blocks/FounderQuote'
 import { MissionVision } from '@/blocks/MissionVision'
 import { Hero } from '@/blocks/Hero'
 import { Stats, adaptStats } from '@/blocks/Stats'
+import { Team, teamMembersPlaceholder } from '@/blocks/Team'
 import { Values } from '@/blocks/Values'
 import { Navbar, navbarPlaceholder } from '@/components/Navbar'
 import { asset } from '@/utilities/asset'
@@ -20,11 +21,10 @@ import '../styles.css'
 /**
  * "À propos" — the company story page.
  *
- * First pass: the chrome only. Navbar, hero, client logos, contact, stats and
- * footer are the blocks the other pages already share, so this route is
- * deliberately thin. The narrative sections in the design — Notre histoire, the
- * CEO quote, Mission & Vision, Nos valeurs, Quatre entités, Des produits
- * certifiés and Notre équipe — land in later passes, one section at a time.
+ * Navbar, hero, client logos, contact, stats and footer are the blocks the
+ * other pages share. Between them, the narrative sections in the design's
+ * order: Notre histoire, the founder quote, Mission & Vision, Nos valeurs,
+ * Quatre entités, Des produits certifiés and Notre équipe.
  *
  * Static like /projets and /metiers, and listed in `revalidateHome`'s PATHS so
  * the client band and the stats here rebuild with everything else.
@@ -168,6 +168,27 @@ const entities = {
   ],
 }
 
+/**
+ * "Notre équipe". The chrome is fixed copy like the sections above; the people
+ * are placeholder data until the team becomes a collection (see
+ * blocks/Team/placeholder.ts). Eight show, then "Voir plus" reveals the rest on
+ * the page — feedback asked for it to load in place rather than navigate.
+ */
+const team = {
+  badge: 'Notre équipe',
+  titleLines: ['Les profils derrière', 'chaque projet.'],
+  lede: 'Plus de 20 experts — architectes d’intérieur, graphistes, project managers, poseurs et techniciens spécialisés — avec une moyenne de 10 ans d’expérience dans l’espace professionnel.',
+  members: teamMembersPlaceholder,
+  variant: 'full' as const,
+  initialCount: 8,
+}
+
+/**
+ * Under the certified products. Feedback asked for a way from the products to
+ * the trades that install them.
+ */
+const certificationsCta = { label: 'Découvrir nos métiers', href: '/metiers' }
+
 export default async function AboutPage() {
   const payload = await getPayload({ config: await config })
 
@@ -194,17 +215,18 @@ export default async function AboutPage() {
     <>
       <Navbar {...navbarPlaceholder} activeHref="/a-propos" />
       <Hero {...hero} />
-      <ClientLogos {...adaptClientLogos(clientsResult.docs)} />
+      <ClientLogos {...adaptClientLogos(clientsResult.docs)} tone="dark" />
       <AboutStory {...story} />
       <FounderQuote {...adaptFounderQuote(founderQuoteDoc)} />
       <MissionVision {...missionVision} />
       <Values {...values} />
       <Entities {...entities} />
-      <Certifications {...adaptCertifications(certificationsDoc)} />
-      <Contact {...adaptContact(siteInfo)} />
-      {/* The design places the stats band low on this page, above the footer —
-          not under the hero as on the homepage. */}
+      <Certifications {...adaptCertifications(certificationsDoc)} cta={certificationsCta} />
+      <Team {...team} />
+      {/* The design places the stats band low on this page, between the team
+          and the contact form — not under the hero as on the homepage. */}
       <Stats {...adaptStats(statsDoc)} />
+      <Contact {...adaptContact(siteInfo)} />
       <Footer {...adaptFooter(footerDoc, servicesResult.docs, siteInfo)} />
     </>
   )

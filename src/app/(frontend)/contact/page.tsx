@@ -47,7 +47,7 @@ export default async function ContactPage() {
     <>
       <Navbar {...navbarPlaceholder} activeHref="/contact" />
       <Hero {...hero} />
-      <ClientLogos {...adaptClientLogos(clientsResult.docs)} />
+      <ClientLogos {...adaptClientLogos(clientsResult.docs)} tone="dark" />
       <Contact {...adaptContact(siteInfo)} />
       <Footer {...adaptFooter(footerDoc, servicesResult.docs, siteInfo)} />
     </>

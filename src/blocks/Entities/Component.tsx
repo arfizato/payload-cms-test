@@ -14,14 +14,20 @@ import type { EntitiesProps } from './types'
  * rather than in one four-up grid. Any row beyond the second repeats the first
  * row's split, so an odd count still lands somewhere sensible.
  *
- * Each card pins its description to the top and its name to the bottom, which
- * is why it is a flex column with a floor rather than stacked margins.
+ * Each card leads with the entity's name and tagline and lets the description
+ * settle at the foot, which is why it is a flex column with a floor rather
+ * than stacked margins. It used to be the other way round; feedback was that
+ * the cards were too dark to read and the names should come first.
+ *
+ * The tints are radial glows defined in styles.css (`.entity-glow--*`) — a
+ * circle of red rising from a corner, redder than the diagonal wash they
+ * replaced.
  */
 const ROW_TEMPLATES = ['grid-cols-[686fr_655fr]', 'grid-cols-[546fr_798fr]']
 
 const TINTS = {
-  accent: 'bg-linear-to-br from-transparent to-accent/25',
-  ember: 'bg-linear-to-br from-transparent to-ember/25',
+  accent: 'entity-glow--accent',
+  ember: 'entity-glow--ember',
 }
 
 export const Entities: React.FC<EntitiesProps> = ({ badge, titleLines, lede, items }) => {
@@ -66,21 +72,23 @@ export const Entities: React.FC<EntitiesProps> = ({ badge, titleLines, lede, ite
             >
               {row.map((item) => (
                 <article
-                  className={`flex min-h-[198px] flex-col justify-between gap-6 overflow-hidden bg-white/5 p-5 ${
+                  className={`flex min-h-[198px] flex-col justify-between gap-6 overflow-hidden border border-white/10 bg-white/[0.08] p-6 ${
                     item.tint ? TINTS[item.tint] : ''
                   }`}
                   key={item.name}
                 >
-                  <p className="text-[16px] leading-[1.25] text-cream">{item.description}</p>
-
                   <div>
                     <h3 className="font-serif text-[clamp(1.5rem,2.2vw,2rem)] leading-none font-bold text-cream">
                       {item.name}
                     </h3>
-                    <p className="mt-[11px] text-[14px] leading-none text-cream/70">
+                    <p className="mt-3 text-[14px] leading-none font-medium text-cream/80">
                       {item.tagline}
                     </p>
                   </div>
+
+                  <p className="max-w-[60ch] text-[17px] leading-[1.45] text-cream">
+                    {item.description}
+                  </p>
                 </article>
               ))}
             </div>

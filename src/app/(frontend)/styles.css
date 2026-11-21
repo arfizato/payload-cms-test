@@ -28,6 +28,13 @@
      the inactive filter pills. Distinct from --color-ink, which stays the
      near-black used for body copy and card titles. */
   --color-navy: #2b2d42;
+  /* Deep green for "certified / approved" marks — the strip along the foot of
+     the "Des produits certifiés" cards. Feedback asked for a success colour in
+     place of the navy those strips used; a deep green keeps the white label at
+     the same contrast the navy had. */
+  --color-success: #2d6a4f;
+  /* The orange of the testimonial star ratings, from the design. Stars only. */
+  --color-rating: #ff7f22;
 
   /* next/font exposes these on <html>; aliased here so the utility names stay
      conventional and the variable is not self-referential. */
@@ -143,6 +150,30 @@
     background-image:
       repeating-linear-gradient(to right, var(--lattice-x) 0 1.26px, transparent 1.26px 80.69px),
       repeating-linear-gradient(to bottom, var(--lattice-y) 0 1.26px, transparent 1.26px 80.69px);
+  }
+
+  /*
+   * The red glow inside the tinted "Quatre entités" cards: a circle of colour
+   * rising from one corner rather than a flat diagonal wash. Feedback found the
+   * diagonal too dark and not red enough. The ember tint sits in the opposite
+   * corner so the two tinted cards do not read as copies of each other.
+   */
+  .entity-glow--accent {
+    background-image: radial-gradient(
+      circle at 100% 100%,
+      color-mix(in srgb, var(--color-accent) 70%, transparent) 0%,
+      color-mix(in srgb, var(--color-accent) 22%, transparent) 38%,
+      transparent 68%
+    );
+  }
+
+  .entity-glow--ember {
+    background-image: radial-gradient(
+      circle at 0% 100%,
+      color-mix(in srgb, var(--color-ember) 70%, transparent) 0%,
+      color-mix(in srgb, var(--color-ember) 22%, transparent) 38%,
+      transparent 68%
+    );
   }
 
   @media (prefers-reduced-motion: reduce) {

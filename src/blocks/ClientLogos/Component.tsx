@@ -10,7 +10,21 @@ import type { ClientLogosProps } from './types'
  */
 const REPEAT = 3
 
-export const ClientLogos: React.FC<ClientLogosProps> = ({ items, speedSeconds = 60 }) => {
+/**
+ * Logos are uploaded in their brand colours. On the dark band `brightness-0`
+ * flattens each one to black and `invert` turns that to white, so every brand
+ * reads as one knocked-out set without anyone preparing white versions.
+ */
+const TONES = {
+  light: { band: 'bg-cream', logo: 'opacity-70 grayscale' },
+  dark: { band: 'bg-ink', logo: 'opacity-80 brightness-0 invert' },
+} as const
+
+export const ClientLogos: React.FC<ClientLogosProps> = ({
+  items,
+  speedSeconds = 60,
+  tone = 'light',
+}) => {
   if (items.length === 0) return null
 
   // One segment, then the same segment again. The animation translates exactly
@@ -20,7 +34,7 @@ export const ClientLogos: React.FC<ClientLogosProps> = ({ items, speedSeconds = 
 
   return (
     <section
-      className="marquee-mask overflow-hidden bg-cream py-[46px]"
+      className={`marquee-mask overflow-hidden py-[46px] ${TONES[tone].band}`}
       aria-label="Ils nous font confiance"
     >
       <div
@@ -33,7 +47,9 @@ export const ClientLogos: React.FC<ClientLogosProps> = ({ items, speedSeconds = 
 
           const image = (
             <Image
-              className="marquee-item h-11 w-auto opacity-70 grayscale"
+              // 48px, the design's logo row height. Feedback asked for bigger
+              // logos on every page; this was 44.
+              className={`marquee-item h-12 w-auto ${TONES[tone].logo}`}
               src={logo.src}
               alt={logo.alt}
               width={logo.width}

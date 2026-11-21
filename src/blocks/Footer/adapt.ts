@@ -1,4 +1,5 @@
 import { asset } from '@/utilities/asset'
+import { metierHref } from '@/utilities/metierAnchor'
 import type {
   Footer as PayloadFooter,
   Service as PayloadService,
@@ -39,10 +40,9 @@ export const adaptFooter = (
   servicesTitle: doc.servicesTitle ?? undefined,
   services: services.map((service) => ({
     label: service.title,
-    // No per-métier detail pages yet, and the Metiers block renders one section
-    // for all of them rather than an anchor each, so every row points at the
-    // métiers page itself rather than the homepage expertises section.
-    href: '/metiers',
+    // No per-métier detail pages yet, but each row on /metiers carries its own
+    // anchor, so the footer lands on the métier that was clicked.
+    href: metierHref(service.title),
   })),
   contactTitle: doc.contactTitle ?? undefined,
   // `inFooter` lets an editor keep opening hours out of the footer while still

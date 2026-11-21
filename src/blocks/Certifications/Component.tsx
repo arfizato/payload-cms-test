@@ -56,6 +56,7 @@ export const Certifications: React.FC<CertificationsProps> = ({
   titleLines,
   lede,
   items,
+  cta,
 }) => {
   if (items.length === 0) return null
 
@@ -98,10 +99,10 @@ export const Certifications: React.FC<CertificationsProps> = ({
             >
               {row.map((item, columnIndex) => (
                 <article
-                  // Square at the top, rounded at the foot: the radius is on
-                  // the card rather than the strip so `overflow-hidden` clips
-                  // the strip and the decoration to the same corner.
-                  className="relative flex min-h-[290px] flex-col overflow-hidden rounded-b-[10px] bg-paper"
+                  // The radius is on the card rather than the strip so
+                  // `overflow-hidden` clips the strip and the decoration to the
+                  // same corner.
+                  className="relative flex min-h-[290px] flex-col overflow-hidden rounded-[4px] bg-paper shadow-[0_2px_10px_rgba(23,24,23,0.06)]"
                   key={item.brand}
                 >
                   <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -119,38 +120,29 @@ export const Certifications: React.FC<CertificationsProps> = ({
                     ))}
                   </div>
 
-                  <div className="relative flex-1 p-5">
-                    <p className="mb-4">
-                      <span className="inline-flex items-center rounded-full bg-accent/10 px-3 py-1 text-[12px] leading-[18px] font-medium text-accent">
+                  {/*
+                    Heading, then the brand as a label, then the copy — the
+                    order and type sizes of the design's first card, which
+                    feedback asked the other three to follow. The label is the
+                    same tight 10% wash as the project hashtags, without the #.
+                  */}
+                  <div className="relative flex flex-1 flex-col gap-4 p-6">
+                    <div className="flex flex-col items-start gap-2">
+                      <h3 className="font-serif text-[clamp(1.25rem,1.7vw,1.525rem)] leading-[1.4] font-bold text-[#1a1a1a]">
+                        {item.heading}
+                      </h3>
+
+                      <span className="rounded-[4px] bg-accent/10 px-4 py-1 text-[11px] leading-[17px] font-bold text-accent">
                         {item.brand}
                       </span>
-                    </p>
+                    </div>
 
-                    <h3 className="font-serif text-[1.25rem] leading-[1.3] font-bold text-ink">
-                      {item.heading}
-                    </h3>
-
-                    <p className="mt-3 text-[0.875rem] leading-[1.43] text-navy/75">{item.body}</p>
+                    <p className="text-[16px] leading-[1.2] text-ink">{item.body}</p>
                   </div>
 
                   {item.certification && (
-                    <p className="lattice relative mt-auto flex items-center gap-2 bg-navy px-5 py-4 text-[0.875rem] text-cream">
-                      <svg
-                        aria-hidden="true"
-                        className="flex-none"
-                        fill="none"
-                        height="12"
-                        viewBox="0 0 14 12"
-                        width="14"
-                      >
-                        <path
-                          d="M1 6.2 5 10 13 1.5"
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.6"
-                        />
-                      </svg>
+                    <p className="lattice relative mt-auto flex items-center gap-2.5 bg-success py-4 pr-5 pl-8 text-[17px] leading-[26px] font-medium text-white">
+                      <MedalIcon />
                       {item.certification}
                     </p>
                   )}
@@ -159,7 +151,51 @@ export const Certifications: React.FC<CertificationsProps> = ({
             </div>
           ))}
         </div>
+
+        {cta && (
+          <p className="mt-[clamp(40px,4.5vw,64px)] flex justify-center">
+            <a
+              className="inline-flex h-11 items-center gap-2 rounded-md bg-ink px-5 text-[14px] font-semibold text-cream transition hover:-translate-y-0.5"
+              href={cta.href}
+            >
+              {cta.label}
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 11 11">
+                <path
+                  d="M1.5 9.5L9.5 1.5M9.5 1.5H3.5M9.5 1.5V7.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
+          </p>
+        )}
       </div>
     </section>
   )
 }
+
+/**
+ * A rosette on two ribbons, in place of the check the strip used to carry —
+ * feedback wanted the mark to say "certified" rather than "done".
+ */
+const MedalIcon: React.FC = () => (
+  <svg
+    aria-hidden="true"
+    className="flex-none"
+    fill="none"
+    height="22"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1.6"
+    viewBox="0 0 24 24"
+    width="22"
+  >
+    <path d="M8.5 13.6 6.5 22l5.5-3 5.5 3-2-8.4" />
+    <circle cx="12" cy="8.5" r="6.5" />
+    <path d="m12 5.4 1 2 2.2.3-1.6 1.6.4 2.2-2-1-2 1 .4-2.2-1.6-1.6 2.2-.3z" />
+  </svg>
+)
