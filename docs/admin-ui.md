@@ -4,8 +4,12 @@ The Payload admin is React, and nearly every part of it is replaceable. This mat
 than it sounds: the panel is the product the client actually touches. Everything else —
 the schema, the rendering strategy, the hosting — is invisible to them.
 
-Current state: `src/app/(payload)/custom.scss` is empty and there is no
-`admin.components` block in `payload.config.ts`. Nothing is customised yet.
+Current state: `src/app/(payload)/custom.scss` is empty. The sidebar is replaced
+(`admin.components.Nav` → `src/components/admin/PageNav.tsx`): one group per page of the
+site, each listing that page's sections. The layout is the `SITE_PAGES` list in
+`src/admin/pages.ts` — **adding a section or page to the site means adding it there**, or
+it only shows up in the sidebar's leftover groups below the pages. Shared sections
+(footer, clients, contact details) are listed under every page they appear on.
 
 ---
 
