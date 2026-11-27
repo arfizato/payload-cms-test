@@ -10,6 +10,8 @@ import * as migration_20260920_185521_add_roles_and_activity_log from './2026092
 import * as migration_20261111_173819_add_founder_quote from './20261111_173819_add_founder_quote';
 import * as migration_20261111_182652_add_certifications from './20261111_182652_add_certifications';
 import * as migration_20261121_184329_add_testimonials_and_team from './20261121_184329_add_testimonials_and_team';
+import * as migration_20261127_143642_add_articles from './20261127_143642_add_articles';
+import * as migration_20261127_160452_add_article_sections from './20261127_160452_add_article_sections';
 
 export const migrations = [
   {
@@ -70,6 +72,16 @@ export const migrations = [
   {
     up: migration_20261121_184329_add_testimonials_and_team.up,
     down: migration_20261121_184329_add_testimonials_and_team.down,
-    name: '20261121_184329_add_testimonials_and_team'
+    name: '20261121_184329_add_testimonials_and_team',
+  },
+  {
+    up: migration_20261127_143642_add_articles.up,
+    down: migration_20261127_143642_add_articles.down,
+    name: '20261127_143642_add_articles',
+  },
+  {
+    up: migration_20261127_160452_add_article_sections.up,
+    down: migration_20261127_160452_add_article_sections.down,
+    name: '20261127_160452_add_article_sections'
   },
 ];

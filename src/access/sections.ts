@@ -13,6 +13,8 @@
  */
 export const SECTIONS = [
   { value: 'projects', label: { fr: 'Réalisations', en: 'Projects' } },
+  { value: 'articles', label: { fr: 'Articles', en: 'Articles' } },
+  { value: 'article-categories', label: { fr: 'Catégories d’articles', en: 'Article categories' } },
   { value: 'services', label: { fr: 'Métiers', en: 'Services' } },
   { value: 'clients', label: { fr: 'Clients', en: 'Clients' } },
   { value: 'testimonials', label: { fr: 'Témoignages', en: 'Testimonials' } },

@@ -65,6 +65,17 @@ const footer: PageSection = {
 
 export const SITE_PAGES: SitePage[] = [
   {
+    label: { fr: 'Actualités', en: 'News' },
+    sections: [
+      { type: 'collection', slug: 'articles', label: { fr: 'Articles', en: 'Articles' } },
+      {
+        type: 'collection',
+        slug: 'article-categories',
+        label: { fr: 'Catégories d’articles', en: 'Article categories' },
+      },
+    ],
+  },
+  {
     label: { fr: 'Page d’accueil', en: 'Homepage' },
     sections: [
       clients,

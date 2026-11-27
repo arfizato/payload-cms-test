@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image, { getImageProps } from 'next/image'
 import React from 'react'
 
 import { SectionTag } from '@/components/SectionTag'
@@ -6,18 +6,31 @@ import { SectionTag } from '@/components/SectionTag'
 import type { HeroProps } from './types'
 
 export const Hero: React.FC<HeroProps> = ({ badge, title, lede, cta, image }) => {
+  const imageProps = {
+    className: '-z-20 object-cover',
+    style: { objectPosition: image.focalPoint ?? 'center 62%' },
+    src: image.src,
+    alt: image.alt,
+    fill: true,
+    sizes: '100vw',
+    quality: 82,
+  }
+
+  const mobile = image.mobileSrc
+    ? getImageProps({ ...imageProps, src: image.mobileSrc }).props
+    : undefined
+
   return (
     <section className="relative isolate flex min-h-svh items-center overflow-hidden px-gutter pt-[120px] pb-[clamp(72px,12vh,132px)] text-white">
-      <Image
-        className="-z-20 object-cover"
-        style={{ objectPosition: image.focalPoint ?? 'center 62%' }}
-        src={image.src}
-        alt={image.alt}
-        fill
-        priority
-        sizes="100vw"
-        quality={82}
-      />
+      {mobile ? (
+        <picture>
+          <source media="(width < 900px)" sizes={mobile.sizes} srcSet={mobile.srcSet} />
+          {/* eslint-disable-next-line @next/next/no-img-element -- getImageProps supplies optimized sources for picture. */}
+          <img {...getImageProps({ ...imageProps, loading: 'eager', fetchPriority: 'high' }).props} />
+        </picture>
+      ) : (
+        <Image {...imageProps} priority />
+      )}
       {/* Two overlays: one for the copy on the left, one so the nav stays legible. */}
       <div className="hero-scrim absolute inset-0 -z-10" aria-hidden="true" />
 
