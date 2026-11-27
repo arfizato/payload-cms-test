@@ -10,6 +10,7 @@ export type HeroProps = {
   }
   image: {
     src: string
+    mobileSrc?: string
     alt: string
     /**
      * CSS `object-position` for the crop. The band is always one viewport tall,

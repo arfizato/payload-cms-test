@@ -35,7 +35,9 @@ export const adaptFooter = (
   ),
   navTitle: doc.navTitle ?? undefined,
   navLinks: (doc.navLinks ?? []).flatMap((row) =>
-    row.label && row.href ? [{ label: row.label, href: row.href }] : [],
+    row.label && row.href
+      ? [{ label: row.label, href: row.href === '#actualites' ? '/actualites' : row.href }]
+      : [],
   ),
   servicesTitle: doc.servicesTitle ?? undefined,
   services: services.map((service) => ({
