@@ -74,6 +74,8 @@ export interface Config {
     clients: Client;
     testimonials: Testimonial;
     'team-members': TeamMember;
+    'article-categories': ArticleCategory;
+    articles: Article;
     'activity-log': ActivityLog;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
@@ -90,6 +92,8 @@ export interface Config {
     clients: ClientsSelect<false> | ClientsSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
+    'article-categories': ArticleCategoriesSelect<false> | ArticleCategoriesSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
     'activity-log': ActivityLogSelect<false> | ActivityLogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -171,6 +175,8 @@ export interface User {
   sections?:
     | (
         | 'projects'
+        | 'articles'
+        | 'article-categories'
         | 'services'
         | 'clients'
         | 'testimonials'
@@ -398,6 +404,92 @@ export interface TeamMember {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "article-categories".
+ */
+export interface ArticleCategory {
+  id: number;
+  title: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Shown on the listing card and in the article introduction.
+   */
+  excerpt: string;
+  image?: (number | null) | Media;
+  /**
+   * Optional. Defaults to the cover image.
+   */
+  detailImage?: (number | null) | Media;
+  category: number | ArticleCategory;
+  publishedAt: string;
+  sections?:
+    | {
+        title: string;
+        body: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        /**
+         * One image displays full width. Two images sit side by side on desktop.
+         */
+        images?:
+          | {
+              image: number | Media;
+              caption?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * For existing articles. This content is displayed until sections are added.
+   */
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * History of publishes, deletions and permission changes. Filled in automatically, read-only.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -410,6 +502,8 @@ export interface ActivityLog {
   section?:
     | (
         | 'projects'
+        | 'articles'
+        | 'article-categories'
         | 'services'
         | 'clients'
         | 'testimonials'
@@ -573,6 +667,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'team-members';
         value: number | TeamMember;
+      } | null)
+    | ({
+        relationTo: 'article-categories';
+        value: number | ArticleCategory;
+      } | null)
+    | ({
+        relationTo: 'articles';
+        value: number | Article;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -739,6 +841,47 @@ export interface TeamMembersSelect<T extends boolean = true> {
   role?: T;
   photo?: T;
   order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "article-categories_select".
+ */
+export interface ArticleCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  excerpt?: T;
+  image?: T;
+  detailImage?: T;
+  category?: T;
+  publishedAt?: T;
+  sections?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        images?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  body?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

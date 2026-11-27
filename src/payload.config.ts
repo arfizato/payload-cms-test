@@ -10,6 +10,8 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { ActivityLog } from './collections/ActivityLog'
+import { ArticleCategories } from './collections/ArticleCategories'
+import { Articles } from './collections/Articles'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Services } from './collections/Services'
@@ -50,7 +52,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Media, Services, Projects, Clients, Testimonials, TeamMembers, ActivityLog],
+  collections: [Users, Media, Services, Projects, Clients, Testimonials, TeamMembers, ArticleCategories, Articles, ActivityLog],
   globals: [
     SiteInfoGlobal,
     StatsGlobal,
